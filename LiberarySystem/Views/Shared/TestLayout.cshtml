@@ -1,0 +1,20 @@
+﻿@{
+    Layout = "_LayoutBase";
+}
+
+@section Navbar {
+    <nav class="navbar navbar-expand-lg main-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="@Url.Action("Dashboard", "Admin")">Admin Panel</a>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Books")">Manage Books</a></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Authors")">Authors</a></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Users")">Users</a></li>
+                    <li class="nav-item"><a class="nav-link text-danger" href="@Url.Action("Logout", "Authentications")">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+}

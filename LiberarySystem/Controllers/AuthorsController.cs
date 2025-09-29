@@ -4,59 +4,65 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Login.Models;
+using library_system.Models;
 
 namespace LiberarySystem.Controllers
 {
-    public class UsersController : Controller
+    public class AuthorsController : Controller
     {
         private readonly AppDbContext _context;
 
-        public UsersController(AppDbContext context)
+        public AuthorsController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Users
-        public async Task<IActionResult> Index()
+        private string getPath(string fileName)
         {
-            return View(await _context.User.ToListAsync());
+            return "~/Views/Admin/Authors/" + fileName + ".cshtml";
         }
 
-        // GET: Users/Details/5
+        // GET: Authors
+        public async Task<IActionResult> Index()
+        {
+            return View(getPath(nameof(Index)), await _context.Author.ToListAsync());
+        }
+
+        // GET: Authors/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
 
-            var user = await _context.User.FirstOrDefaultAsync(m => m.ID == id);
-            if (user == null) return NotFound();
+            var author = await _context.Author.FirstOrDefaultAsync(m => m.Id == id);
+            if (author == null) return NotFound();
 
-            return View(user);
+            return View(author);
         }
 
-        // GET: Users/Create (Admin only)
+        // GET: Authors/Create (Admin only)
         public IActionResult Create()
         {
             if (HttpContext.Session.GetString("Role") != "Admin")
                 return RedirectToAction("AccessDenied", "Authentications");
 
-            return View();
+            return View(getPath(nameof(Create)));
         }
 
-        // POST: Users/Create (Admin only)
+
+        // POST: Authors/Create (Admin only)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(User user)
+        public async Task<IActionResult> Create(Author author)
         {
             if (HttpContext.Session.GetString("Role") != "Admin")
                 return RedirectToAction("AccessDenied", "Authentications");
 
-            _context.Add(user);
+            _context.Add(author);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Users/Edit/5 (Admin only)
+        // GET: Authors/Edit/5 (Admin only)
         public async Task<IActionResult> Edit(int? id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin")
@@ -64,30 +70,30 @@ namespace LiberarySystem.Controllers
 
             if (id == null) return NotFound();
 
-            var user = await _context.User.FindAsync(id);
-            if (user == null) return NotFound();
+            var author = await _context.Author.FindAsync(id);
+            if (author == null) return NotFound();
 
-            return View(user);
+            return View(getPath(nameof(Edit)));
         }
 
-        // POST: Users/Edit/5 (Admin only)
+        // POST: Authors/Edit/5 (Admin only)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, User user)
+        public async Task<IActionResult> Edit(int id, Author author)
         {
             if (HttpContext.Session.GetString("Role") != "Admin")
                 return RedirectToAction("AccessDenied", "Authentications");
 
-            if (id != user.ID) return NotFound();
+            if (id != author.Id) return NotFound();
 
             try
             {
-                _context.Update(user);
+                _context.Update(author);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.User.Any(e => e.ID == user.ID))
+                if (!_context.Author.Any(e => e.Id == author.Id))
                     return NotFound();
                 else
                     throw;
@@ -96,7 +102,7 @@ namespace LiberarySystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Users/Delete/5 (Admin only)
+        // GET: Authors/Delete/5 (Admin only)
         public async Task<IActionResult> Delete(int? id)
         {
             if (HttpContext.Session.GetString("Role") != "Admin")
@@ -104,13 +110,13 @@ namespace LiberarySystem.Controllers
 
             if (id == null) return NotFound();
 
-            var user = await _context.User.FirstOrDefaultAsync(m => m.ID == id);
-            if (user == null) return NotFound();
+            var author = await _context.Author.FirstOrDefaultAsync(m => m.Id == id);
+            if (author == null) return NotFound();
 
-            return View(user);
+            return View(getPath(nameof(Delete)));
         }
 
-        // POST: Users/Delete/5 (Admin only)
+        // POST: Authors/Delete/5 (Admin only)
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -118,8 +124,8 @@ namespace LiberarySystem.Controllers
             if (HttpContext.Session.GetString("Role") != "Admin")
                 return RedirectToAction("AccessDenied", "Authentications");
 
-            var user = await _context.User.FindAsync(id);
-            if (user != null) _context.User.Remove(user);
+            var author = await _context.Author.FindAsync(id);
+            if (author != null) _context.Author.Remove(author);
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

@@ -1,0 +1,50 @@
+﻿@model library_system.Models.Tipology
+
+@{
+    Layout = "_LayoutAdmin";
+
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Tipology</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+      
+    </dl>
+</div>
+<div>
+
+    <td>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+
+    <style>
+        .btn-custom {
+            display: inline-block;
+            background-color: blue; /* Button background */
+            color: white; /* Text color */
+            padding: 5px 15px;
+            text-decoration: none; /* Remove underline */
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            .btn-custom:hover {
+                background-color: white;
+                color: blue;
+                border: 2px solid blue;
+            }
+    </style>
+
+    </td>
+</div>

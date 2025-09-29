@@ -1,0 +1,80 @@
+﻿@model IEnumerable<library_system.Models.Author>
+
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Authors";
+    var role = Context.Session.GetString("Role");
+}
+
+<h1>Index</h1>
+<div class="mb-3">
+    @if (role == "Admin" || role == "Employee")
+    {
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Add New
+        </a>
+    }
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecondName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BirthDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeadDate)
+            </th>
+   
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecondName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BirthDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeadDate)
+            </td>
+
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn-custom">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn-custom">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn-custom">Delete</a>
+
+                    <style>
+                        .btn-custom {
+                            display: inline-block;
+                            background-color: blue; /* Button background */
+                            color: white; /* Text color */
+                            padding: 5px 15px;
+                            text-decoration: none; /* Remove underline */
+                            border-radius: 5px;
+                            font-weight: bold;
+                            transition: background-color 0.3s, color 0.3s;
+                        }
+
+                            .btn-custom:hover {
+                                background-color: white;
+                                color: blue;
+                                border: 2px solid blue;
+                            }
+                    </style>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Login.Models;
+using library_system.Models;
 
-    public class AppDbContext : DbContext
+public class AppDbContext : DbContext
+{
+    public AppDbContext(DbContextOptions<AppDbContext> options)
+        : base(options)
     {
-        public AppDbContext (DbContextOptions<AppDbContext> options)
-            : base(options)
-        {
-        }
-
-        public DbSet<Login.Models.Authentication> Authentication { get; set; } = default!;
-
-public DbSet<Login.Models.User> User { get; set; } = default!;
     }
+
+    public DbSet<Authentication> Authentication { get; set; }
+    public DbSet<User> User { get; set; }
+    public DbSet<Book> Book{ get; set; }
+    public DbSet<Tipology> Tipology { get; set; }
+    public DbSet<Author> Author { get; set; }
+    public DbSet<Pubblisher> Pubblisher { get; set; }
+}

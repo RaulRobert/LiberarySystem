@@ -22,6 +22,8 @@ namespace Login.Models
 
         [Required]
         public string Email { get; set; }
+        public string Role { get; set; } = "User"; // default is User
+    
 
     }
 }

@@ -1,0 +1,22 @@
+﻿@* Views/Books/Details.cshtml *@
+@model library_system.Models.Book
+
+@{
+    Layout = "_LayoutEmployee";
+    ViewData["Title"] = "Book Details";
+}
+
+<h2>@Model.Title</h2>
+<hr />
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">@Model.Title</h4>
+        <p><strong>Author:</strong> @Model.Authors?.FirstName @Model.Authors?.SecondName</p>
+        <p><strong>Publisher:</strong> @Model.Pubblisher?.Company</p>
+        <p><strong>Typology:</strong> @Model.Tipology?.Description</p>
+        <p><strong>Year:</strong> @Model.PubblicDate</p>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>
