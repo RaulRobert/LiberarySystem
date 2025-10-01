@@ -1,0 +1,76 @@
+﻿@model IEnumerable<library_system.Models.Book>
+
+@{
+    Layout = "_LayoutAdmin";  @* change to _LayoutEmployee or _LayoutUser per area *@
+    ViewData["Title"] = "Books";
+    var role = Context.Session.GetString("Role");
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Books List</h2>
+
+    <div class="mb-3">
+        @if (role == "Admin" || role == "Employee")
+        {
+            <a asp-action="Create" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Add New Book
+            </a>
+        }
+    </div>
+
+    <table class="table table-striped table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Publisher</th>
+                <th>Published Date</th>
+                <th>Borrowed</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.Authors?.FirstName @book.Authors?.SecondName</td>
+                    <td>@book.Pubblisher?.Company</td>
+                    <td>@book.PubblicDate.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        @if (book.IsBorrowed)
+                        {
+                            <span class="badge bg-danger">Yes</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">No</span>
+                        }
+                    </td>
+                    <td class="text-end">
+                        <a asp-action="Details" asp-route-id="@book.Id" class="btn btn-info btn-sm">
+                            <i class="bi bi-eye"></i> Details
+                        </a>
+
+                        @if (role == "Admin" || role == "Employee")
+                        {
+                            <a asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i> Edit
+                            </a>
+                        }
+
+                        @if (role == "Admin")
+                        {
+                            <a asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i> Delete
+                            </a>
+                        }
+
+                      
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

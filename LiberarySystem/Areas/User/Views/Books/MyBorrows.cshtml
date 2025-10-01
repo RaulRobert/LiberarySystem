@@ -1,0 +1,53 @@
+﻿@model IEnumerable<LiberarySystem.Models.Borrow>
+
+@{
+    ViewData["Title"] = "My Borrowed Books";
+    Layout = "_LayoutUser";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">My Borrowed Books</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Publisher</th>
+                <th>Borrow Date</th>
+                <th>Return Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var borrow in Model)
+            {
+                <tr>
+                    <td>@borrow.book?.Title</td>
+                    <td>@borrow.book?.Authors?.FirstName @borrow.book?.Authors?.SecondName</td>
+                    <td>@borrow.book?.Pubblisher?.Company</td>
+                    <td>@borrow.BorrowDate.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        @if (borrow.ReturnDate == null)
+                        {
+                            <span class="text-danger">Not Returned</span>
+                        }
+                        else
+                        {
+                            @borrow.ReturnDate?.ToString("yyyy-MM-dd")
+                        }
+                    </td>
+                    <td>
+                        @if (borrow.ReturnDate == null)
+                        {
+                            <form asp-action="Return" method="post">
+                                <input type="hidden" name="id" value="@borrow.BookId" />
+                                <button type="submit" class="btn btn-warning btn-sm">Return</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

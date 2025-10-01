@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LiberarySystem.Models;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -22,8 +23,14 @@ namespace Login.Models
 
         [Required]
         public string Email { get; set; }
-        public string Role { get; set; } = "User"; // default is User
-    
+
+        [ForeignKey("Role")]
+        public int RoleId { get; set; }
+        public virtual Role Role { get; set; }
+
+        public string Token { get; set; }
+
+
 
     }
 }

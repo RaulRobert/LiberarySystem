@@ -1,0 +1,405 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Library Management System</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Login.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+    <style>
+        /* Root variables for colors, shadows, etc. */
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --light-blue: #dbeafe;
+            --dark-blue: #1e40af;
+            --accent-blue: #60a5fa;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --background-light: #f8fafc;
+            --white: #ffffff;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        html {
+            font-size: 14px;
+            position: relative;
+            min-height: 100%;
+        }
+
+        body {
+            margin-bottom: 60px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header / Navbar */
+        .site-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .main-navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            color: var(--white) !important;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+            .navbar-brand:hover {
+                color: var(--accent-blue) !important;
+            }
+
+        .navbar-nav .nav-link {
+            color: var(--white) !important;
+            font-weight: 500;
+            padding: 0.75rem 1.25rem;
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+            margin: 0 0.25rem;
+            position: relative;
+        }
+
+            .navbar-nav .nav-link:hover {
+                background-color: rgba(255, 255, 255, 0.15);
+                transform: translateY(-1px);
+            }
+
+            .navbar-nav .nav-link.active {
+                background-color: rgba(255, 255, 255, 0.2);
+            }
+
+        /* Dropdown */
+        .dropdown-menu {
+            background-color: var(--white);
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-lg);
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-item {
+            color: var(--text-dark);
+            font-weight: 500;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+            .dropdown-item:hover {
+                background-color: var(--light-blue);
+                color: var(--primary-blue);
+            }
+
+        .navbar-toggler {
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+        }
+
+            .navbar-toggler:focus {
+                box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+            }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Main content */
+        .main-content {
+            background-color: var(--white);
+            min-height: calc(100vh - 200px);
+            border-radius: 1rem 1rem 0 0;
+            margin-top: 1rem;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+        }
+
+        /* Books page styles */
+        .books-hero {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+            color: white;
+            padding: 60px 0;
+            margin: -30px -30px 40px -30px;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+            .books-hero h1 {
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
+
+            .books-hero p {
+                font-size: 1.1rem;
+                opacity: 0.9;
+            }
+
+        .book-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            height: 100%;
+            border: 2px solid var(--border-color);
+        }
+
+            .book-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 15px 40px rgba(30, 58, 138, 0.15);
+                border-color: var(--accent-blue);
+            }
+
+        .book-card-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .book-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .book-card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        .book-card-body {
+            padding: 25px;
+        }
+
+        .book-info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            color: #555;
+        }
+
+            .book-info-item i {
+                width: 25px;
+                color: var(--secondary-blue);
+                font-size: 1.1rem;
+            }
+
+            .book-info-item .label {
+                font-weight: 600;
+                margin-right: 8px;
+                color: #333;
+            }
+
+        .book-status {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-available {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-borrowed {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .book-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .btn-custom {
+            flex: 1;
+            min-width: 100px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-details {
+            background: var(--secondary-blue);
+            color: white;
+        }
+
+            .btn-details:hover {
+                background: var(--primary-blue);
+                transform: scale(1.05);
+            }
+
+        .btn-edit {
+            background: #f59e0b;
+            color: white;
+        }
+
+            .btn-edit:hover {
+                background: #d97706;
+                transform: scale(1.05);
+            }
+
+        .btn-delete {
+            background: #dc2626;
+            color: white;
+        }
+
+            .btn-delete:hover {
+                background: #b91c1c;
+                transform: scale(1.05);
+            }
+
+        .btn-borrow {
+            background: #10b981;
+            color: white;
+        }
+
+            .btn-borrow:hover {
+                background: #059669;
+                transform: scale(1.05);
+            }
+
+        .btn-return {
+            background: #f97316;
+            color: white;
+        }
+
+            .btn-return:hover {
+                background: #ea580c;
+                transform: scale(1.05);
+            }
+
+        .add-book-btn {
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--accent-blue) 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+            .add-book-btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+                background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #666;
+        }
+
+            .empty-state i {
+                font-size: 5rem;
+                color: var(--light-blue);
+                margin-bottom: 20px;
+            }
+
+            .empty-state h3 {
+                color: var(--primary-blue);
+                margin-bottom: 10px;
+            }
+
+      
+
+        {
+            margin: -20px -20px 30px -20px;
+            padding: 40px 20px;
+        }
+
+        .books-hero h1 {
+            font-size: 2rem;
+        }
+
+        .book-card-body {
+            padding: 20px;
+        }
+
+        .btn-custom {
+            flex: 1 1 100%;
+        }
+
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container-fluid" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+            <nav class="navbar navbar-expand-lg main-navbar">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="@Url.Action("Index", "Books")">Library Management System</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarUser" aria-controls="navbarUser" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarUser">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Index", "Books")">
+                                    <i class="fas fa-book me-2"></i>Books
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("MyBorrows", "Books")">
+                                    <i class="fas fa-info-circle me-2"></i>My Borrows
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Logout", "Authentications")">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <main role="main" class="main-content">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,4 +1,8 @@
-﻿using library_system.Business;
+﻿using LiberarySystem.Models;
+using library_system.Business;
+using library_system.Middleware;
+
+//using library_system.Middleware;
 using Login.Models; // make sure namespaces match
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -15,10 +19,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<AuthenticationBO>();
 builder.Services.AddScoped<AdminBO>();
 builder.Services.AddScoped<BookBO>();
+builder.Services.AddScoped<AuthorBO>();
+builder.Services.AddScoped<PubblisherBO>();
+builder.Services.AddScoped<TipologyBO>();
 
 
 
 // Authentication (cookie-based)
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -38,29 +46,6 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-    if (!db.Authentication.Any(u => u.Role == "Admin"))
-    {
-        var admin = new Authentication
-        {
-            Username = "admin",
-            Name = "System",
-            Surname = "Administrator",
-            Email = "admin@library.com",
-            Role = "Admin"
-        };
-
-        // ✅ Hash password with the same PasswordHasher
-        var hasher = new PasswordHasher<Authentication>();
-        admin.Password = hasher.HashPassword(admin, "Admin@123");
-
-        db.Authentication.Add(admin);
-        db.SaveChanges();
-    }
-}
 
 // Pipeline
 if (!app.Environment.IsDevelopment())
@@ -69,19 +54,29 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
 app.UseRouting();
 
-// ✅ Session must come before Authentication & Authorization
+// ✅ Session must come before auth
 app.UseSession();
+
+// ✅ Custom middleware for token validation
+
+app.UseMiddleware<SessionValidationMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+
+// First, allow area routes
+app.MapControllerRoute(
+    name: "Areas",
+    pattern: "{area:exists}/{controller=Books}/{action=Index}/{id?}");
+
+// Fallback for non-area controllers like Authentications
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Authentications}/{action=SignIn}/{id?}");
+
 
 app.Run();
